@@ -1,0 +1,3 @@
+development:
+  database: dummy_development
+  adapter: mongodb
