@@ -15,8 +15,8 @@ class ImmutableMongoid::Test < ActiveSupport::TestCase
     user = build(:user)
     user.save
 
-    assert_not_nil User.find(user._object_id)
-    assert_not_equal user._id, user._object_id
+    assert_not_nil User.find(user._immutable_id)
+    assert_not_equal user._id, user._immutable_id
   end
 
   test "document update" do
@@ -32,7 +32,7 @@ class ImmutableMongoid::Test < ActiveSupport::TestCase
     assert_equal 2, User.unscoped.all.size
     assert_equal 1, User.all.size
 
-    user = User.find_by(_object_id: old_user._object_id)
+    user = User.find_by(_immutable_id: old_user._immutable_id)
 
     assert_not_nil user
     assert user._active

@@ -8,11 +8,11 @@ module ImmutableMongoid
 
   included do
     field :_active
-    field :_object_id
+    field :_immutable_id
 
     default_scope -> { where(_active: true) }
 
-    before_create :set_object_id
+    before_create :set_immutable_id
     before_create :set_active
 
     before_update :set_old_attributes
@@ -27,16 +27,16 @@ module ImmutableMongoid
     end
 
     def reload
-      self.class.find(self._object_id)
+      self.class.find(self._immutable_id)
     end
 
     def self.find ident
-      find_by(_object_id: ident)
+      find_by(_immutable_id: ident)
     end
   end
 
-  def set_object_id
-    self._object_id ||= generate_object_id
+  def set_immutable_id
+    self._immutable_id ||= generate_immutable_id
   end
 
   def set_active
@@ -60,7 +60,7 @@ module ImmutableMongoid
 
   private
 
-  def generate_object_id
+  def generate_immutable_id
     # TODO: Change this in order to generate
     # a more appropriate id format
     SecureRandom.hex
