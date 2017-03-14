@@ -34,10 +34,16 @@ class ImmutableMongoid::Test < ActiveSupport::TestCase
 
     user = User.find_by(_immutable_id: old_user._immutable_id)
 
+    # New active user is created with the same immutable_id
+    # and all other attributes. Only email (changed attribute) and
+    # Mongo's internal _id are different
+
     assert_not_nil user
     assert user._active
-    assert_not_equal user._id, old_user._id
     assert_equal user.name, old_user.name
+    assert_equal user._immutable_id, old_user._immutable_id
+
+    assert_not_equal user._id, old_user._id
     assert_equal user.email, old_user.email + '.new'
   end
 end
