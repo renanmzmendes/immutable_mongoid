@@ -18,8 +18,6 @@ module ImmutableMongoid
     before_update :set_old_attributes
     after_update :create_active_object
 
-    alias_method :id, :_object_id
-
     def old_attributes
       @changed_attributes ||= {}
     end
@@ -33,7 +31,7 @@ module ImmutableMongoid
     end
 
     def self.find ident
-      self.find_by(_object_id: ident)
+      find_by(_object_id: ident)
     end
   end
 
@@ -57,7 +55,7 @@ module ImmutableMongoid
   end
 
   def create_active_object
-    self.class.create(new_attributes.merge(_object_id: self._object_id))
+    self.class.create(attributes.except('_id', '_created_at').merge new_attributes)
   end
 
   private
